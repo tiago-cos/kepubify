@@ -345,6 +345,19 @@ func transformContentKoboSpans(doc *html.Node) {
 
 		case html.ElementNode:
 			switch cur.DataAtom {
+			case atom.Svg:
+				// increment paragraph counter immediately
+				para++
+				seg = 0
+				incParaNext = false
+				// now wrap the <svg> element in a span
+				seg++
+				span := koboSpan(para, seg)
+				// move cur (the <svg>) into our new span
+				cur.Parent.InsertBefore(span, cur)
+				cur.Parent.RemoveChild(cur)
+				span.AppendChild(cur)
+				continue
 			case atom.Img:
 				// increment the paragraph immediately
 				para++
@@ -366,7 +379,7 @@ func transformContentKoboSpans(doc *html.Node) {
 				cur.Parent.RemoveChild(cur)
 
 				fallthrough
-			case atom.Script, atom.Style, atom.Pre, atom.Audio, atom.Video, atom.Svg, atom.Math:
+			case atom.Script, atom.Style, atom.Pre, atom.Audio, atom.Video, atom.Math:
 				continue // don't add spans to elements which should keep text as-is
 			case atom.P, atom.Ol, atom.Ul, atom.Table, atom.H1, atom.H2, atom.H3, atom.H4, atom.H5, atom.H6:
 				incParaNext = true // increment it only if it will have spans in it
@@ -822,7 +835,7 @@ func transformDummyTitlepageAdd(opf *bytes.Buffer, opfF string) (string, io.Read
 		return "", nil, fmt.Errorf("render opf: %w", err)
 	}
 
-	return fn, strings.NewReader(`<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><title></title></head><body><p style="text-align: center; margin: 4em 0; font-size: .7em; font-style: italic;">Page intentionally left blank by kepubify.</p></body></html>`), nil
+	return fn, strings.NewReader(`<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><title></title></head><body><p style="text-align: center; margin: 4em 0; font-size: .7em; font-style: italic;"><span class="koboSpan" id="kobo.1.1">Page intentionally left blank by kepubify.</span></p></body></html>`), nil
 }
 
 // withText adds text to a node and returns it.
