@@ -4,6 +4,9 @@
 
 **[`Website`](https://pgaskin.net/kepubify/)** &nbsp; **[`Download`](https://pgaskin.net/kepubify/dl/)** &nbsp; **[`Documentation`](https://pgaskin.net/kepubify/docs/)** &nbsp; **[`Web Version`](https://pgaskin.net/kepubify/try/)** &nbsp; **[`pkg.go.dev`](https://pkg.go.dev/github.com/pgaskin/kepubify/v4)**
 
+> **Note:** This fork modifies kepubify to add Kobo spans to SVG elements and the generated title page. Its purpose is to avoid issues with progress synchronization via Kobo spans.  
+> Since this isn’t a general bug fix, I don’t intend to merge it upstream.
+
 ## About
 
 Kepubify is standalone (it also works as a library or a webapp), converts most books in a fraction of a second (40-80x faster than Calibre), handles malformed HTML/XHTML without causing further issues, has multiple optional conversion options (punctuation smartening, custom CSS, text replacement, and more), has a full test suite, is interoperable with other applications, and is safe to use with untrusted books.
